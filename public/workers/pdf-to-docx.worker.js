@@ -44,37 +44,37 @@ async function init() {
   pyodide.runPython(`
     import sys
     from types import ModuleType
-    
+
     # Mock tqdm (used for progress bars)
     tqdm_mod = ModuleType("tqdm")
     def tqdm(iterable=None, *args, **kwargs):
         return iterable if iterable else []
     tqdm_mod.tqdm = tqdm
     sys.modules["tqdm"] = tqdm_mod
-    
+
     # Mock fire (CLI tool, not needed for library usage)
     fire_mod = ModuleType("fire")
     sys.modules["fire"] = fire_mod
   `);
 
-  await install(basePath + 'numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
-  await install(basePath + 'typing_extensions-4.12.2-py3-none-any.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/typing_extensions-4.12.2-py3-none-any.whl');
   // Packaging is missing locally but required by fonttools. Try fetching from CDN.
   try {
-    await install('https://cdn.jsdelivr.net/pyodide/v0.26.1/full/packaging-24.1-py3-none-any.whl');
+    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/packaging-24.1-py3-none-any.whl');
   } catch (e) {
     console.warn("Failed to load packaging from CDN, fonttools might fail:", e);
   }
-  await install(basePath + 'fonttools-4.56.0-py3-none-any.whl');
-  await install(basePath + 'lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
-  await install(basePath + 'pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
-  await install(basePath + 'python_docx-1.2.0-py3-none-any.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/fonttools-4.56.0-py3-none-any.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/python_docx-1.2.0-py3-none-any.whl');
   // opencv is huge, only install if pdf2docx strictly requires it (it usually does for image extraction)
-  await install(basePath + 'opencv_python-4.11.0.86-cp313-cp313-pyodide_2025_0_wasm32.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/opencv_python-4.11.0.86-cp313-cp313-pyodide_2025_0_wasm32.whl');
 
   // Finally pdf2docx
   self.postMessage({ type: 'status', message: 'Installing pdf2docx...' });
-  await install(basePath + 'pdf2docx-0.5.8-py3-none-any.whl');
+  await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pdf2docx-0.5.8-py3-none-any.whl');
 
   // Define the python processing script
   self.postMessage({ type: 'status', message: 'Initializing converter script...' });

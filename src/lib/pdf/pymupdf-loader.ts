@@ -43,14 +43,14 @@ export async function loadPyMuPDF(): Promise<any> {
       await pyodide.loadPackage('micropip');
       const micropip = pyodide.pyimport('micropip');
 
-      // Install pymupdf and pdf2docx from local wheels
-      await micropip.install(`${basePath}pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl`);
-      await micropip.install(`${basePath}fonttools-4.56.0-py3-none-any.whl`);
-      await micropip.install(`${basePath}lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl`);
-      await micropip.install(`${basePath}numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl`);
-      await micropip.install(`${basePath}python_docx-1.2.0-py3-none-any.whl`);
-      await micropip.install(`${basePath}typing_extensions-4.12.2-py3-none-any.whl`);
-      await micropip.install(`${basePath}pdf2docx-0.5.8-py3-none-any.whl`);
+      // Install pymupdf and pdf2docx from CDN
+      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/fonttools-4.56.0-py3-none-any.whl');
+      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
+      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
+      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/python_docx-1.2.0-py3-none-any.whl');
+      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/typing_extensions-4.12.2-py3-none-any.whl');
+      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pdf2docx-0.5.8-py3-none-any.whl');
 
       // Import pymupdf
       await pyodide.runPythonAsync('import pymupdf');

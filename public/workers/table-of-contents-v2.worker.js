@@ -20,8 +20,7 @@ async function init() {
 
     self.postMessage({ type: 'status', message: 'Installing dependencies...' });
 
-    const basePath = '/pymupdf-wasm/';
-    await pyodide.loadPackage(basePath + 'pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+    await pyodide.loadPackage('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
 
     // CJK Font will be downloaded on-demand by the Python script
     self.postMessage({ type: 'status', message: 'Initializing TOC generator...' });
