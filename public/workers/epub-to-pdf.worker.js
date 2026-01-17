@@ -14,6 +14,7 @@
  * - Support for Chinese/Japanese/Korean text in EPUB files
  */
 
+// Note: Using local Pyodide
 import { loadPyodide } from '/pymupdf-wasm/pyodide.js';
 
 let pyodide = null;
@@ -114,7 +115,7 @@ async function init(needsCJKFont = false) {
     self.postMessage({ type: 'status', message: 'Loading Python environment...' });
 
     pyodide = await loadPyodide({
-        indexURL: '/pymupdf-wasm/',
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full/',
         fullStdLib: false
     });
 
@@ -124,8 +125,8 @@ async function init(needsCJKFont = false) {
         await pyodide.loadPackage(url);
     };
 
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+    await install(self.location.origin + '/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    await install(self.location.origin + '/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
 
     if (needsCJKFont) {
         await loadCJKFont();

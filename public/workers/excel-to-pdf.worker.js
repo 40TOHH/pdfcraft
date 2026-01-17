@@ -12,6 +12,7 @@
  * 8. CJK font support with dynamic loading
  */
 
+// Note: Using local Pyodide
 import { loadPyodide } from '/pymupdf-wasm/pyodide.js';
 
 let pyodide = null;
@@ -85,15 +86,15 @@ async function init(needsCJKFont = false) {
     self.postMessage({ type: 'status', message: 'Loading Python environment...' });
 
     pyodide = await loadPyodide({
-        indexURL: '/pymupdf-wasm/',
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full/',
         fullStdLib: false
     });
 
     self.postMessage({ type: 'status', message: 'Installing dependencies...' });
 
-    await pyodide.loadPackage('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
-    await pyodide.loadPackage('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
-    await pyodide.loadPackage('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+    await pyodide.loadPackage(self.location.origin + '/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    await pyodide.loadPackage(self.location.origin + '/pymupdf-wasm/lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    await pyodide.loadPackage(self.location.origin + '/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
 
     if (needsCJKFont) {
         await loadCJKFont();

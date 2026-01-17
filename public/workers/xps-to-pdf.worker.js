@@ -3,6 +3,7 @@
  * PyMuPDF natively supports opening XPS files
  */
 
+// Note: Using local Pyodide
 import { loadPyodide } from '/pymupdf-wasm/pyodide.js';
 
 let pyodide = null;
@@ -25,11 +26,9 @@ async function init() {
         await pyodide.loadPackage(url);
     };
 
-    const basePath = '/pymupdf-wasm/';
-
-    // Install PyMuPDF from CDN
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+    // Install PyMuPDF from local files
+    await install(self.location.origin + '/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    await install(self.location.origin + '/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
 
     self.postMessage({ type: 'status', message: 'Initializing converter script...' });
 

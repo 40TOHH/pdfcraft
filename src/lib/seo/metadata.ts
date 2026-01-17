@@ -52,7 +52,7 @@ export function getAlternateUrls(path: string = ''): Record<string, string> {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   const alternates: Record<string, string> = {};
 
-  const locales: Locale[] = ['en', 'ja', 'ko', 'es', 'fr', 'de', 'zh', 'pt'];
+  const locales: Locale[] = ['en', 'ja', 'ko', 'es', 'fr', 'de', 'zh', 'pt', 'ru'];
   for (const locale of locales) {
     alternates[locale] = `${siteConfig.url}/${locale}${cleanPath}`;
   }

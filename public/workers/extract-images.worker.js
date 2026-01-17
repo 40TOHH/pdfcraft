@@ -2,6 +2,7 @@
  * Extract Images from PDF Worker (via Pyodide + PyMuPDF)
  */
 
+// Note: Using local Pyodide
 import { loadPyodide } from '/pymupdf-wasm/pyodide.js';
 
 let pyodide = null;
@@ -14,7 +15,7 @@ async function init() {
 
     // Load Pyodide
     pyodide = await loadPyodide({
-        indexURL: '/pymupdf-wasm/',
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full/',
         fullStdLib: false
     });
 
@@ -30,7 +31,7 @@ async function init() {
     // Install dependencies from CDN
     // We only need pymupdf for extraction, but might need basic types
     // Using the same set as other workers ensures compatibility and cached loading
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+    await install(self.location.origin + '/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
 
     self.postMessage({ type: 'status', message: 'Initializing extractor...' });
 

@@ -1,6 +1,7 @@
+// Note: Using local Pyodide
 import { loadPyodide } from '/pymupdf-wasm/pyodide.js';
 
-const basePath = '/pymupdf-wasm/';
+const basePath = self.location.origin + '/pymupdf-wasm/';
 let pyodide = null;
 let initPromise = null;
 
@@ -21,19 +22,19 @@ async function init() {
         await pyodide.loadPackage(url);
     };
 
-    // Install dependencies in order from CDN
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/six-1.17.0-py2.py3-none-any.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pytz-2025.1-py2.py3-none-any.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/python_dateutil-2.9.0.post0-py2.py3-none-any.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    // Install dependencies from local files
+    await install(basePath + 'six-1.17.0-py2.py3-none-any.whl');
+    await install(basePath + 'pytz-2025.1-py2.py3-none-any.whl');
+    await install(basePath + 'python_dateutil-2.9.0.post0-py2.py3-none-any.whl');
+    await install(basePath + 'numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
 
     self.postMessage({ type: 'status', message: 'Installing Pandas...' });
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pandas-2.2.3-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    await install(basePath + 'pandas-2.2.3-cp313-cp313-pyodide_2025_0_wasm32.whl');
 
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/et_xmlfile-2.0.0-py3-none-any.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/openpyxl-3.1.5-py2.py3-none-any.whl');
+    await install(basePath + 'et_xmlfile-2.0.0-py3-none-any.whl');
+    await install(basePath + 'openpyxl-3.1.5-py2.py3-none-any.whl');
 
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+    await install(basePath + 'pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
 
     // Define the python processing script
     self.postMessage({ type: 'status', message: 'Initializing converter script...' });

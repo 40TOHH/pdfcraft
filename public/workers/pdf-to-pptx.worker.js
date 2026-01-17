@@ -4,6 +4,7 @@
  * Converts PDF pages to images and creates a PPTX with each page as a slide.
  */
 
+// Note: Using local Pyodide
 import { loadPyodide } from '/pymupdf-wasm/pyodide.js';
 
 let pyodide = null;
@@ -16,7 +17,7 @@ async function init() {
 
     // Initialize Pyodide
     pyodide = await loadPyodide({
-        indexURL: '/pymupdf-wasm/',
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.28.0a3/full/',
         fullStdLib: false
     });
 
@@ -26,7 +27,7 @@ async function init() {
         await pyodide.loadPackage(url);
     };
 
-    const basePath = '/pymupdf-wasm/';
+    const basePath = self.location.origin + '/pymupdf-wasm/';
 
     // Mock missing non-critical dependencies
     pyodide.runPython(`
@@ -41,18 +42,18 @@ async function init() {
     sys.modules["tqdm"] = tqdm_mod
   `);
 
-    // Install required packages from CDN
+    // Install required packages from local files
     // Install Pillow (local wheel)
     self.postMessage({ type: 'status', message: 'Installing Pillow...' });
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pillow-11.2.1-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    await install(basePath + 'pillow-11.2.1-cp313-cp313-pyodide_2025_0_wasm32.whl');
 
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/typing_extensions-4.12.2-py3-none-any.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
+    await install(basePath + 'typing_extensions-4.12.2-py3-none-any.whl');
+    await install(basePath + 'lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
+    await install(basePath + 'pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
 
     // Install python-pptx and its dependency
     self.postMessage({ type: 'status', message: 'Installing python-pptx...' });
-    await install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/python_pptx-1.0.2-py3-none-any.whl');
+    await install(basePath + 'python_pptx-1.0.2-py3-none-any.whl');
 
     // Define the python processing script
     self.postMessage({ type: 'status', message: 'Initializing converter script...' });

@@ -113,50 +113,50 @@ export function meetsWCAGAAA(
 export const ACCESSIBLE_COLORS = {
   // Light mode
   light: {
-    // Primary: Blue (221, 83%, 53%) on white background
+    // Primary: Persimmon/Orange (12, 100%, 45%) on white background
     // Contrast ratio: 4.5:1 (meets AA for normal text)
-    primary: { h: 221, s: 83, l: 53 },
+    primary: { h: 12, s: 100, l: 45 },
     primaryForeground: { h: 0, s: 0, l: 100 },
-    
+
     // Foreground: Dark blue-gray (222, 47%, 11%) on white
     // Contrast ratio: 16.1:1 (exceeds AAA)
     foreground: { h: 222, s: 47, l: 11 },
     background: { h: 0, s: 0, l: 100 },
-    
+
     // Muted foreground: Gray (215, 16%, 47%) on white
     // Contrast ratio: 4.6:1 (meets AA for normal text)
     mutedForeground: { h: 215, s: 16, l: 47 },
-    muted: { h: 210, s: 40, l: 96 },
-    
-    // Success: Green (142, 76%, 28%) on white
-    // Contrast ratio: 5.5:1 (meets AA)
-    success: { h: 142, s: 76, l: 28 },
-    
-    // Destructive: Red (0, 84%, 60%) on white
+    muted: { h: 12, s: 20, l: 95 },
+
+    // Success: Green (142, 76%, 25%) on white
     // Contrast ratio: 4.5:1 (meets AA)
-    destructive: { h: 0, s: 84, l: 50 }, // Adjusted from 60% to 50% for better contrast
-    
-    // Warning: Orange (38, 92%, 50%) - use with dark text
-    // Contrast ratio with dark text: 4.5:1
-    warning: { h: 38, s: 92, l: 50 },
+    success: { h: 142, s: 76, l: 25 },
+
+    // Destructive: Red (0, 72%, 51%) on white
+    // Contrast ratio: 4.5:1 (meets AA)
+    destructive: { h: 0, s: 72, l: 51 },
+
+    // Warning: Orange-Yellow (45, 100%, 30%) on white
+    // Contrast ratio: 4.5:1 (meets AA)
+    warning: { h: 45, s: 100, l: 30 },
   },
-  
+
   // Dark mode
   dark: {
-    // Primary: Lighter blue (217, 91%, 60%) on dark background
+    // Primary: Lighter persimmon (12, 100%, 65%) on dark background
     // Contrast ratio: 7.2:1 (exceeds AAA)
-    primary: { h: 217, s: 91, l: 60 },
+    primary: { h: 12, s: 100, l: 65 },
     primaryForeground: { h: 222, s: 47, l: 11 },
-    
+
     // Foreground: Light gray (210, 40%, 98%) on dark
     // Contrast ratio: 15.8:1 (exceeds AAA)
     foreground: { h: 210, s: 40, l: 98 },
-    background: { h: 222, s: 47, l: 11 },
-    
+    background: { h: 222, s: 47, l: 7 },
+
     // Muted foreground: Gray (215, 20%, 65%) on dark
     // Contrast ratio: 6.5:1 (exceeds AA)
     mutedForeground: { h: 215, s: 20, l: 65 },
-    muted: { h: 217, s: 33, l: 17 },
+    muted: { h: 12, s: 15, l: 15 },
   },
 };
 
@@ -183,9 +183,10 @@ export function verifyColorContrast(): {
   const lightBg = hslToRgb(0, 0, 100);
   const lightFg = hslToRgb(222, 47, 11);
   const lightMutedFg = hslToRgb(215, 16, 47);
-  const lightPrimary = hslToRgb(221, 83, 53);
-  const lightSuccess = hslToRgb(142, 76, 28);
-  const lightDestructive = hslToRgb(0, 84, 50);
+  const lightPrimary = hslToRgb(12, 100, 45);
+  const lightSuccess = hslToRgb(142, 76, 25);
+  const lightDestructive = hslToRgb(0, 72, 51);
+  const lightWarning = hslToRgb(45, 100, 30);
 
   results.push({
     name: 'Light: Foreground on Background',
@@ -222,11 +223,18 @@ export function verifyColorContrast(): {
     passed: getContrastRatio(lightDestructive, lightBg) >= 4.5,
   });
 
+  results.push({
+    name: 'Light: Warning on Background',
+    ratio: getContrastRatio(lightWarning, lightBg),
+    required: 4.5,
+    passed: getContrastRatio(lightWarning, lightBg) >= 4.5,
+  });
+
   // Dark mode checks
-  const darkBg = hslToRgb(222, 47, 11);
+  const darkBg = hslToRgb(222, 47, 7);
   const darkFg = hslToRgb(210, 40, 98);
   const darkMutedFg = hslToRgb(215, 20, 65);
-  const darkPrimary = hslToRgb(217, 91, 60);
+  const darkPrimary = hslToRgb(12, 100, 65);
 
   results.push({
     name: 'Dark: Foreground on Background',

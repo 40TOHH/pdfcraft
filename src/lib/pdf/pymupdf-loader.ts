@@ -37,20 +37,21 @@ export async function loadPyMuPDF(): Promise<any> {
       // Initialize Pyodide
       const pyodide = await window.loadPyodide!({
         indexURL: basePath,
+        fullStdLib: false // We'll install only the packages we need
       });
 
       // Load required packages
       await pyodide.loadPackage('micropip');
       const micropip = pyodide.pyimport('micropip');
 
-      // Install pymupdf and pdf2docx from CDN
-      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl');
-      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/fonttools-4.56.0-py3-none-any.whl');
-      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl');
-      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl');
-      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/python_docx-1.2.0-py3-none-any.whl');
-      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/typing_extensions-4.12.2-py3-none-any.whl');
-      await micropip.install('https://cdn.jsdelivr.net/gh/PDFCraftTool/pdfcraft@main/public/pymupdf-wasm/pdf2docx-0.5.8-py3-none-any.whl');
+      // Install pymupdf and pdf2docx from local files
+      await micropip.install(`${window.location.origin}/pymupdf-wasm/pymupdf-1.26.3-cp313-none-pyodide_2025_0_wasm32.whl`);
+      await micropip.install(`${window.location.origin}/pymupdf-wasm/fonttools-4.56.0-py3-none-any.whl`);
+      await micropip.install(`${window.location.origin}/pymupdf-wasm/lxml-5.4.0-cp313-cp313-pyodide_2025_0_wasm32.whl`);
+      await micropip.install(`${window.location.origin}/pymupdf-wasm/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl`);
+      await micropip.install(`${window.location.origin}/pymupdf-wasm/python_docx-1.2.0-py3-none-any.whl`);
+      await micropip.install(`${window.location.origin}/pymupdf-wasm/typing_extensions-4.12.2-py3-none-any.whl`);
+      await micropip.install(`${window.location.origin}/pymupdf-wasm/pdf2docx-0.5.8-py3-none-any.whl`);
 
       // Import pymupdf
       await pyodide.runPythonAsync('import pymupdf');

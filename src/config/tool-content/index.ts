@@ -11,6 +11,7 @@ export { toolContentFr } from './fr';
 export { toolContentDe } from './de';
 export { toolContentZh } from './zh';
 export { toolContentPt } from './pt';
+export { toolContentRu } from './ru';
 
 import { toolContentEn } from './en';
 import { toolContentJa } from './ja';
@@ -20,9 +21,10 @@ import { toolContentFr } from './fr';
 import { toolContentDe } from './de';
 import { toolContentZh } from './zh';
 import { toolContentPt } from './pt';
+import { toolContentRu } from './ru';
 import { ToolContent } from '@/types/tool';
 
-export type Locale = 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'zh' | 'pt';
+export type Locale = 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'zh' | 'pt' | 'ru';
 
 /**
  * Get tool content for a specific locale
@@ -38,6 +40,7 @@ export function getToolContent(locale: Locale, toolId: string): ToolContent | un
     de: toolContentDe,
     zh: toolContentZh,
     pt: toolContentPt,
+    ru: toolContentRu,
   };
 
   const localeContent = contentMap[locale];

@@ -2,53 +2,53 @@
 
 /* PDFCraft Design System - CSS Variables for Theming */
 :root {
-  /* Primary Colors - Deep Blue/Indigo for trust and modern tech feel */
-  --color-primary: 226 71% 55%; /* #3b82f6 - slightly more vibrant */
-  --color-primary-foreground: 0 0% 100%;
-  --color-primary-hover: 226 71% 45%;
-  
-  /* Secondary Colors - Slate for neutral elements */
-  --color-secondary: 215 20% 90%;
+  /* Primary Colors - Persimmon/Orange for brand identity */
+  --color-primary: 12 100% 45%; /* #FF5C34 adjusted for better contrast - was 59% */
+  --color-primary-foreground: 0 0% 100%; /* White for contrast */
+  --color-primary-hover: 12 100% 35%; /* Darker persimmon on hover */
+
+  /* Secondary Colors - Light persimmon for neutral elements */
+  --color-secondary: 12 50% 85%; /* Light persimmon tone */
   --color-secondary-foreground: 215 25% 15%;
-  --color-secondary-hover: 215 20% 80%;
-  
-  /* Accent Colors - Teal/Cyan for highlights */
-  --color-accent: 172 66% 50%;
-  --color-accent-foreground: 0 0% 100%;
-  
+  --color-secondary-hover: 12 50% 75%; /* Medium persimmon on hover */
+
+  /* Accent Colors - Same as primary for consistency */
+  --color-accent: 12 100% 45%; /* #FF5C34 adjusted for better contrast - was 59% */
+  --color-accent-foreground: 0 0% 100%; /* White for contrast */
+
   /* Background Colors */
-  --color-background: 210 40% 98%; /* Slightly off-white for depth */
-  --color-foreground: 222 47% 11%;
-  
+  --color-background: 0 0% 100%; /* Pure white */
+  --color-foreground: 222 47% 11%; /* Dark gray for text */
+
   /* Muted Colors */
-  --color-muted: 210 40% 96%;
+  --color-muted: 12 20% 95%; /* Very light persimmon tone */
   --color-muted-foreground: 215 16% 47%;
-  
+
   /* Card Colors */
-  --color-card: 0 0% 100%;
-  --color-card-foreground: 222 47% 11%;
-  
+  --color-card: 0 0% 100%; /* Pure white */
+  --color-card-foreground: 222 47% 11%; /* Dark gray for text */
+
   /* Border Colors */
-  --color-border: 214 32% 91%;
-  --color-input: 214 32% 91%;
-  --color-ring: 226 71% 55%;
-  
+  --color-border: 12 20% 90%; /* Light persimmon border */
+  --color-input: 12 20% 90%; /* Light persimmon input border */
+  --color-ring: 12 100% 45%; /* Persimmon focus ring adjusted for contrast */
+
   /* Destructive Colors */
-  --color-destructive: 0 84% 60%;
-  --color-destructive-foreground: 0 0% 100%;
-  
+  --color-destructive: 0 72% 51%; /* Red for destructive actions */
+  --color-destructive-foreground: 0 0% 100%; /* White text on red */
+
   /* Success Colors */
-  --color-success: 142 76% 36%;
-  --color-success-foreground: 0 0% 100%;
-  
+  --color-success: 142 76% 25%; /* Green for success - was 36%, adjusted for contrast */
+  --color-success-foreground: 0 0% 100%; /* White text on green */
+
   /* Warning Colors */
-  --color-warning: 38 92% 50%;
-  --color-warning-foreground: 0 0% 100%;
-  
+  --color-warning: 45 100% 30%; /* Orange-yellow for warnings (#F59E0B) - was 51%, adjusted for contrast */
+  --color-warning-foreground: 0 0% 100%; /* White text on warning */
+
   /* Typography */
   --font-sans: var(--font-inter, 'Inter'), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: var(--font-jetbrains-mono, 'JetBrains Mono'), 'Fira Code', Consolas, monospace;
-  
+
   /* Spacing Scale */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -57,21 +57,21 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
-  
+
   /* Border Radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
-  
+
   /* Shadows - Layered, smoother shadows for depth */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-  
+
   /* Transitions */
   --transition-fast: 150ms;
   --transition-normal: 250ms;
@@ -80,29 +80,29 @@
 
 /* Dark Mode Theme */
 .dark {
-  --color-primary: 226 71% 60%;
-  --color-primary-foreground: 222 47% 11%;
-  --color-primary-hover: 226 71% 70%;
-  
-  --color-secondary: 215 20% 20%;
-  --color-secondary-foreground: 210 40% 98%;
-  --color-secondary-hover: 215 20% 30%;
-  
-  --color-accent: 172 66% 50%;
-  --color-accent-foreground: 222 47% 11%;
-  
-  --color-background: 222 47% 7%; /* Darker background for more contrast */
-  --color-foreground: 210 40% 98%;
-  
-  --color-muted: 217 33% 13%;
-  --color-muted-foreground: 215 20% 65%;
-  
-  --color-card: 222 47% 10%;
-  --color-card-foreground: 210 40% 98%;
-  
-  --color-border: 217 33% 15%;
-  --color-input: 217 33% 15%;
-  --color-ring: 226 71% 60%;
+  --color-primary: 12 100% 65%; /* Lighter persimmon in dark mode */
+  --color-primary-foreground: 222 47% 11%; /* Dark gray text on orange */
+  --color-primary-hover: 12 100% 55%; /* Medium persimmon on hover in dark mode */
+
+  --color-secondary: 12 30% 20%; /* Dark persimmon tone */
+  --color-secondary-foreground: 210 40% 98%; /* Near-white text */
+  --color-secondary-hover: 12 30% 30%; /* Lighter dark persimmon on hover */
+
+  --color-accent: 12 100% 65%; /* Lighter persimmon in dark mode */
+  --color-accent-foreground: 222 47% 11%; /* Dark gray for contrast */
+
+  --color-background: 222 47% 7%; /* Dark background */
+  --color-foreground: 210 40% 98%; /* Light text */
+
+  --color-muted: 12 15% 15%; /* Dark muted persimmon tone */
+  --color-muted-foreground: 215 20% 65%; /* Light muted text */
+
+  --color-card: 222 47% 10%; /* Dark card background */
+  --color-card-foreground: 210 40% 98%; /* Light card text */
+
+  --color-border: 12 15% 20%; /* Dark persimmon border */
+  --color-input: 12 15% 20%; /* Dark persimmon input border */
+  --color-ring: 12 100% 65%; /* Light persimmon focus ring in dark mode */
 }
 
 /* Base Styles */
