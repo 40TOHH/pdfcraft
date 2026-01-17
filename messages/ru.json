@@ -123,6 +123,10 @@
       "auto": "Автоматически",
       "portrait": "Книжная",
       "landscape": "Альбомная"
+    },
+    "languageSwitcher": {
+      "ariaLabel": "Сменить язык",
+      "selectLanguage": "Выбрать язык"
     }
   },
   "toolsPage": {

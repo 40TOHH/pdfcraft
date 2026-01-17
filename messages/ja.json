@@ -341,6 +341,10 @@
       "auto": "Auto",
       "portrait": "Portrait",
       "landscape": "Landscape"
+    },
+    "languageSwitcher": {
+      "ariaLabel": "言語を変更",
+      "selectLanguage": "言語を選択"
     }
   },
   "errors": {

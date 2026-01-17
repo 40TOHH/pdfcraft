@@ -341,6 +341,10 @@
       "auto": "Auto",
       "portrait": "Portrait",
       "landscape": "Landscape"
+    },
+    "languageSwitcher": {
+      "ariaLabel": "Changer la langue",
+      "selectLanguage": "Sélectionner la langue"
     }
   },
   "errors": {

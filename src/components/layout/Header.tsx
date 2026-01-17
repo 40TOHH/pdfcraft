@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { RecentFilesDropdown } from '@/components/common/RecentFilesDropdown';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { ClientOnly } from '@/components/common/ClientOnly';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher/LanguageSwitcher';
 import { searchTools, SearchResult } from '@/lib/utils/search';
 import { getToolContent } from '@/config/tool-content';
 import { getAllTools } from '@/config/tools';
@@ -327,8 +328,10 @@ export const Header: React.FC<HeaderProps> = ({ locale, showSearch = true }) => 
               <Github className="h-5 w-5" aria-hidden="true" />
             </a>
 
-            {/* Language Selector placeholder */}
-            <div id="language-selector-slot" />
+            {/* Language Selector */}
+            <ClientOnly>
+              <LanguageSwitcher currentLocale={locale} />
+            </ClientOnly>
 
             {/* Theme Toggle */}
             <ClientOnly>

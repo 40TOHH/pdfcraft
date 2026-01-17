@@ -123,6 +123,10 @@
       "auto": "Auto",
       "portrait": "Portrait",
       "landscape": "Landscape"
+    },
+    "languageSwitcher": {
+      "ariaLabel": "Cambiar idioma",
+      "selectLanguage": "Seleccionar idioma"
     }
   },
   "faqPage": {
