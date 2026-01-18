@@ -47,6 +47,22 @@ export interface ImageToPDFOptions {
   scaleToFit: boolean;
   /** SVG render scale for quality (1-4) */
   svgScale: number;
+  /** Whether to enable batch mode (split into multiple PDFs) */
+  batchMode?: boolean;
+  /** Number of images per PDF file in batch mode */
+  imagesPerPdf?: number;
+}
+
+/**
+ * Batch export result
+ */
+export interface BatchExportResult {
+  /** The ZIP file containing all PDFs */
+  zipBlob: Blob;
+  /** Number of PDF files created */
+  pdfCount: number;
+  /** Total number of images processed */
+  imageCount: number;
 }
 
 /**
@@ -60,6 +76,8 @@ const DEFAULT_OPTIONS: ImageToPDFOptions = {
   centerImage: true,
   scaleToFit: true,
   svgScale: 2,
+  batchMode: false,
+  imagesPerPdf: 10,
 };
 
 /**
@@ -80,7 +98,7 @@ const SUPPORTED_MIME_TYPES = [
  * Supported file extensions
  */
 const SUPPORTED_EXTENSIONS = [
-  '.jpg', '.jpeg', '.png', '.webp', '.bmp', 
+  '.jpg', '.jpeg', '.png', '.webp', '.bmp',
   '.tiff', '.tif', '.svg', '.heic', '.heif'
 ];
 
@@ -130,7 +148,7 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
       this.updateProgress(5, 'Loading PDF library...');
 
       const pdfLib = await loadPdfLib();
-      
+
       if (this.checkCancelled()) {
         return this.createErrorOutput(
           PDFErrorCode.PROCESSING_CANCELLED,
@@ -156,7 +174,7 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
 
         const file = files[i];
         const fileProgress = 10 + (i * progressPerFile);
-        
+
         this.updateProgress(
           fileProgress,
           `Processing image ${i + 1} of ${files.length}: ${file.name}`
@@ -176,7 +194,7 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
       this.updateProgress(95, 'Saving PDF...');
 
       // Save the PDF
-      const pdfBytes = await pdfDoc.save();
+      const pdfBytes = await pdfDoc.save({ useObjectStreams: true });
       const blob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
 
       this.updateProgress(100, 'Complete!');
@@ -206,7 +224,7 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
     if (SUPPORTED_MIME_TYPES.includes(file.type)) {
       return true;
     }
-    
+
     // Check extension as fallback
     const ext = '.' + file.name.split('.').pop()?.toLowerCase();
     return SUPPORTED_EXTENSIONS.includes(ext);
@@ -287,16 +305,16 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
           const canvas = document.createElement('canvas');
           canvas.width = img.width * scale;
           canvas.height = img.height * scale;
-          
+
           const ctx = canvas.getContext('2d');
           if (!ctx) {
             throw new Error('Failed to get canvas context');
           }
-          
+
           // Scale the context for higher quality rendering
           ctx.scale(scale, scale);
           ctx.drawImage(img, 0, 0);
-          
+
           // Convert to PNG blob
           const pngBlob = await new Promise<Blob>((res, rej) => {
             canvas.toBlob(
@@ -304,11 +322,11 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
               'image/png'
             );
           });
-          
+
           // Embed PNG
           const pngArrayBuffer = await pngBlob.arrayBuffer();
           const pngImage = await pdfDoc.embedPng(new Uint8Array(pngArrayBuffer));
-          
+
           URL.revokeObjectURL(url);
           resolve(pngImage);
         } catch (error) {
@@ -366,7 +384,7 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
       // Match page orientation to image orientation
       const imageIsLandscape = imageWidth > imageHeight;
       const pageIsLandscape = pageWidth > pageHeight;
-      
+
       if (imageIsLandscape !== pageIsLandscape && typeof options.pageSize === 'string' && options.pageSize !== 'FIT') {
         [pageWidth, pageHeight] = [pageHeight, pageWidth];
       }
@@ -455,4 +473,93 @@ export async function imagesToPDF(
     },
     onProgress
   );
+}
+
+/**
+ * Convert images to multiple PDFs based on batch size and package as ZIP
+ */
+export async function imagesToPDFBatch(
+  files: File[],
+  imagesPerPdf: number,
+  options?: Partial<ImageToPDFOptions>,
+  onProgress?: ProgressCallback
+): Promise<{ success: boolean; result?: BatchExportResult; error?: { message: string } }> {
+  try {
+    // Dynamically import JSZip
+    const JSZip = (await import('jszip')).default;
+
+    const totalImages = files.length;
+    const batchCount = Math.ceil(totalImages / imagesPerPdf);
+    const zip = new JSZip();
+
+    onProgress?.(5, 'Creating batch PDFs...');
+
+    const processor = createImageToPDFProcessor();
+
+    for (let i = 0; i < batchCount; i++) {
+      const startIndex = i * imagesPerPdf;
+      const endIndex = Math.min(startIndex + imagesPerPdf, totalImages);
+      const batchFiles = files.slice(startIndex, endIndex);
+
+      const progressStart = 5 + (i / batchCount) * 85;
+      const progressEnd = 5 + ((i + 1) / batchCount) * 85;
+
+      onProgress?.(
+        progressStart,
+        `Processing batch ${i + 1} of ${batchCount} (images ${startIndex + 1}-${endIndex})...`
+      );
+
+      const result = await processor.process(
+        {
+          files: batchFiles,
+          options: options || {},
+        },
+        (prog, message) => {
+          // Map the individual progress to the batch range
+          const mappedProgress = progressStart + (prog / 100) * (progressEnd - progressStart);
+          onProgress?.(mappedProgress, message);
+        }
+      );
+
+      if (!result.success || !result.result) {
+        return {
+          success: false,
+          error: { message: result.error?.message || `Failed to create PDF for batch ${i + 1}` },
+        };
+      }
+
+      // Add PDF to ZIP
+      const pdfBlob = result.result as Blob;
+      const pdfArrayBuffer = await pdfBlob.arrayBuffer();
+      const paddedIndex = String(i + 1).padStart(String(batchCount).length, '0');
+      zip.file(`images_part_${paddedIndex}.pdf`, pdfArrayBuffer);
+    }
+
+    onProgress?.(92, 'Creating ZIP archive...');
+
+    // Generate ZIP file
+    const zipBlob = await zip.generateAsync(
+      { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
+      (metadata) => {
+        const zipProgress = 92 + (metadata.percent / 100) * 8;
+        onProgress?.(zipProgress, `Compressing: ${Math.round(metadata.percent)}%`);
+      }
+    );
+
+    onProgress?.(100, 'Complete!');
+
+    return {
+      success: true,
+      result: {
+        zipBlob,
+        pdfCount: batchCount,
+        imageCount: totalImages,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: { message: error instanceof Error ? error.message : 'Failed to create batch PDFs' },
+    };
+  }
 }
