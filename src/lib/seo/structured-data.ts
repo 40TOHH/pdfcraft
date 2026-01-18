@@ -240,6 +240,7 @@ export function generateWebPageSchema(
     zh: 'zh-CN',
     'zh-TW': 'zh-TW',
     pt: 'pt-BR',
+    ru: 'ru-RU',
   };
 
   return {

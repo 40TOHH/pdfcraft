@@ -246,6 +246,7 @@ export function getOpenGraphLocale(locale: Locale): string {
     zh: 'zh_CN',
     'zh-TW': 'zh_TW',
     pt: 'pt_BR',
+    ru: 'ru_RU',
   };
   return ogLocaleMap[locale] || 'en_US';
 }
